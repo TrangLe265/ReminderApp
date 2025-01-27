@@ -7,10 +7,16 @@ class ReminderService{
     }); 
 
     async getReminders() {
-      
+        try{
             const response = await this.http.get<Reminder[]>('/todos'); 
-           
+            if (response.status !== 200){
+                throw new Error('Failed to fetch reminders!')
+            }
             return response.data; 
+        } catch(error){
+            console.error(error);
+            throw new Error('Failed to fetch reminders!'); 
+        }
     
     }
 
@@ -19,12 +25,12 @@ class ReminderService{
             const response = await this.http.post<Reminder>('/todos', {title}); //Post request require the url and {object} to perfom post 
             //Check https://axios-http.com/docs/post_example
             if (response.status !== 200){
-                return alert('Adding new reminders fails'); 
+                throw new Error('Failed to fetch reminders!')
             }
             return response.data; 
         } catch(error){
             console.error(error);
-            throw error; 
+            throw new Error('Failed to fetch reminders!'); 
         }
     }
 
@@ -32,7 +38,7 @@ class ReminderService{
         try{
             const response = await this.http.delete<Reminder>('/todos/' + id);
             if (response.status !== 200){
-                return alert('Adding new reminders fails'); 
+                return alert('Delete fails'); 
             }
             return response.data; 
 

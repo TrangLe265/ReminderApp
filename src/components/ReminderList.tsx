@@ -8,9 +8,16 @@ interface ReminderListProps {
 
 function ReminderList({ items }: ReminderListProps) { //props is in the type of ReminderListProps
     return (
-        <ul>
+        <ul className='list-group'> 
             {items.map((item)=> 
-                <li key={item.id}>{item.title + ': '  + item.completed} </li>
+                <li className='list-group-item' key={item.id}>
+                    {item.title} 
+                    <div style={{float: 'right' }}> 
+                        <button className='btn btn-outline-danger' style={{marginRight: '10px'}}>Delete</button>
+                        <button className='btn btn-outline-warning' style={{float: 'right'}}>Edit</button>
+                    </div>
+                   
+                </li>
             )}     
         </ul>
     );

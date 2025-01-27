@@ -6,18 +6,29 @@ import ReminderService from './services/reminder';
 
 function App() {
   const [reminders, setReminders] = useState<Reminder[]>([]); //initiate state with empty array of type Reminder
+  const[error, setError]= useState<string>(''); 
   
-  useEffect(() => {loadReminders(); }, []); //set the state with the data from the API  })
+  useEffect(() => {loadReminders(); }, []); //LoadReminders function will be called only once
   
   const loadReminders = async () => {
-    const data = await ReminderService.getReminders(); //fetching data from API
-    setReminders(data); //set the state with the data from the API
+    try {
+      const data = await ReminderService.getReminders(); //fetching data from API
+      if (!data || data.length === 0) {
+        setError('No data found'); //if data is empty, alert the user
+        return; //if data is empty, return
+      } 
+      setReminders(data); //set the state with the data from the API
+      setError(''); //set error to empty
+    } catch(error){ 
+      setError('Fail to load reminders, please try again later'); //if error, alert the user
+    }   
   }
+
   return (
     <div className="App">
       <h1>Reminder Apps</h1>
-      <button className='btn btn-primary'>Click me</button>
       <ReminderList items={reminders}/>
+      {error && <h2>{error}</h2>}
     </div>
   );
 }
