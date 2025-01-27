@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import ReminderList from './components/ReminderList';
 import { Reminder } from './models/Reminder';
-
-const reminders: Reminder[] = [
-  { id: 1, title: 'Meeting with boss', date: new Date(), status: 'active' },
-  { id: 2, title: 'Buy a new laptop', date: new Date(), status: 'active' },
-  { id: 3, title: 'Dentist appointment', date: new Date(), status: 'done' },
-  { id: 4, title: 'Buy a book', date: new Date(), status: 'done' },
-]
+import ReminderService from './services/reminder';
 
 function App() {
+  const [reminders, setReminders] = useState<Reminder[]>([]); //initiate state with empty array of type Reminder
+  
+  useEffect(() => {loadReminders(); }, []); //set the state with the data from the API  })
+  
+  const loadReminders = async () => {
+    const data = await ReminderService.getReminders(); //fetching data from API
+    setReminders(data); //set the state with the data from the API
+  }
   return (
     <div className="App">
       <h1>Reminder Apps</h1>

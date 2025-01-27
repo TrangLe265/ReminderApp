@@ -6,11 +6,11 @@ interface ReminderListProps {
 }
 
 
-function ReminderList({ items }: ReminderListProps) { 
+function ReminderList({ items }: ReminderListProps) { //props is in the type of ReminderListProps
     return (
         <ul>
             {items.map((item)=> 
-                <li key={item.id}>{item.title + ' ' + item.date} </li>
+                <li key={item.id}>{item.title + ': '  + item.completed} </li>
             )}     
         </ul>
     );

@@ -1,6 +1,6 @@
 export interface Reminder {
+    userId: number;
     id: number;
     title: string;
-    date: Date;
-    status: 'active' | 'done';
+    completed: true | false;
 }
