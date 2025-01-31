@@ -9,7 +9,14 @@ function NewReminder({onAddReminder}: NewReminderProps): JSX.Element {
 
     const submitForm = (e: React.FormEvent) => {
         e.preventDefault();
+        if (title.length < 5) {
+            alert('Reminder must be at least 5 characters long, try again!');
+            setTitle('');
+            return;
+        }
+
         onAddReminder(title);
+        setTitle('');
     }   
 
     return (
