@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import ReminderList from './components/ReminderList';
-import { Reminder } from './models/Reminder';
+import Reminder from './models/Reminder';
 import ReminderService from './services/reminder';
+import NewReminder from './components/NewReminder';
 
 function App() {
   const [reminders, setReminders] = useState<Reminder[]>([]); //initiate state with empty array of type Reminder
@@ -24,10 +25,22 @@ function App() {
     }   
   }
 
+  const removeReminder =  (id: number) => {
+    setReminders(reminders.filter((reminder) => reminder.id !== id)); //NOTE!: this is a fake API, therefore the data will only be filtdred in the frontend by this code, not in the backend
+    //if you want to delete the data in the backend, you need to call the API to delete the data, like this: ReminderService.removeReminder(id);
+  }
+  
+  const addReminder = async (title: string) => {
+    console.log(title);
+    const newReminder = await ReminderService.newReminders(title); 
+    setReminders([newReminder,...reminders]); //set the current state of the reminders list with the new reminder
+   }
+
   return (
     <div className="App">
       <h1>Reminder Apps</h1>
-      <ReminderList items={reminders}/>
+      <NewReminder onAddReminder={addReminder} />
+      <ReminderList items={reminders} onRemoveReminder={removeReminder} />
       {error && <h2>{error}</h2>}
     </div>
   );

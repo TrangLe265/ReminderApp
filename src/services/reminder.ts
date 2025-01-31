@@ -1,5 +1,6 @@
+/* eslint-disable import/no-anonymous-default-export */
 import axios from "axios";
-import { Reminder } from "../models/Reminder";
+import Reminder from "../models/Reminder";
 
 class ReminderService{
     http = axios.create({
@@ -24,29 +25,30 @@ class ReminderService{
         try{
             const response = await this.http.post<Reminder>('/todos', {title}); //Post request require the url and {object} to perfom post 
             //Check https://axios-http.com/docs/post_example
-            if (response.status !== 200){
-                throw new Error('Failed to fetch reminders!')
+            if (response.status !== 201){
+                throw new Error(`Failed to add new reminders! Status code: ${response.status}`)
             }
             return response.data; 
         } catch(error){
             console.error(error);
-            throw new Error('Failed to fetch reminders!'); 
+            throw new Error('Failed to add new reminders!'); 
         }
     }
 
-    async deleteReminder(id: number) {
+    async removeReminder(id: number) {
         try{
-            const response = await this.http.delete<Reminder>('/todos/' + id);
+            const response = await this.http.delete('/todos/' + id);
             if (response.status !== 200){
-                return alert('Delete fails'); 
+                throw new Error('Delete fails'); 
             }
-            return response.data; 
+            return response.status; 
 
         } catch(error){
             console.error(error);
-            throw error; 
+            throw new Error('Fail to delete reminder!'); 
+
         }
     }
 }
 
-export default new ReminderService(); //creating new instance here so we dont have to create new instance every single time using this class
+export default new ReminderService(); //TS will complain, but it is not wrong
